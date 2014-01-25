@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">The War of the Worlds</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_jabberwocky">Jabberwocky</string>
+    <string name="title_activity_nasa">U of I at NASA</string>
+    <string name="title_activity_roundball">Roundball</string>
+    <string name="WikiButton">Wikipedia</string>
+    <string name="SurpriseButton">Surprise!</string>
+
+</resources>

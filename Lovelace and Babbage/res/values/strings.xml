@@ -1,0 +1,21 @@
+<resources>
+
+    <string name="app_name">Lovace &amp; Babbage</string>
+    <string name="action_settings">Settings</string>
+    <string name="img_ada_lovelace">Protrait of Ada Lovelace</string>
+    <string name="ada_lovelace_description">Ada Byron was the daughter of a brief marriage between the Romantic poet Lord Byron and Anne Isabelle Milbanke, who separated from Byron just a month after Ada was born. Four months later, Byron left England forever. Ada never met her father (who died in Greece in 1823) and was raised by her mother, Lady Byron. Her life was an apotheosis of struggle between emotion and reason, subjectivism and objectivism, poetics and mathematics, ill health and bursts of energy.
+        									\n\nLady Byron wished her daughter to be unlike her poetical father, and she saw to it that Ada received tutoring in mathematics and music, as disciplines to counter dangerous poetic tendencies. But Ada\'s complex inheritance became apparent as early as 1828, when she produced the design for a flying machine. It was mathematics that gave her life its wings.  
+        									\n\nLady Byron and Ada moved in an elite London society, one in which gentlemen not members of the clergy or occupied with politics or the affairs of a regiment were quite likely to spend their time and fortunes pursuing botany, geology, or astronomy. In the early nineteenth century there were no &quot;professional&quot; scientists (indeed, the word &quot;scientist&quot; was only coined by William Whewell in 1836)—but the participation of noblewomen in intellectual pursuits was not widely encouraged.</string>
+    <string name="ada_lovelace_title">Ada Lovelace</string>
+    <string name="babbage_title">Charles Babbage</string>
+    <string name="babbage_description">Charles Babbage was born in London Dec. 26, 1791, St. Stephan day, in London. He was son of Benjamin Babbage, a banking partner of the Praeds who owned the Bitton Estate in Teignmouth and Betsy Plumleigh Babbage. It was about 1808 when the Babbage family decided to move into the old Rowdens house, located in East Teignmouth, and Benjamin Babbage became a warden of the nearby church of St. Michael.
+        							   \n\nThe father of Charles was a rich man, so it was possible for Charles to receive instruction from several elite schools and teachers during the course of his elementary education. He was about eight when he had to move to a country school to recover from a dangerous fever. His parents sentenced that his &quot;brain was not to be taxed too much&quot;; Babbage wrote: &quot;this great idleness may have led to some of my childish reasonings.&quot;
+Then, he joined King Edward VI Grammar School in Totnes, South Devon, a thriving comprehensive school that\'s still operative today, but his fragile health status forced him back to private teaching for a period. Then, he finally joined a 30-student closed number academy managed by Reverend Stephen Freeman. The academy had a big library, where Babbage used to study mathematics by himself, and learned to love it. He had two more personal tutors after leaving the academy. One was a clergyman of Cambridge, and about him Babbage said: &quot;I fear I did not derive from it all the advantages that I might have done.&quot;. The other one was an Oxford tutor who teached Babbage the Classics, so that he could be accepted to Cambridge.
+										\n\nBabbage arrived at Trinity College, Cambridge in October 1810. He had a big culture - he knew Lagrange, Leibniz, Lacroix, Simpson... and he was seriously disappointed about the math programs available at Cambridge. So he, with J.Herschel, G.Peacock, and other friends, decided to form the Analytical Society.
+										\n\nWhen, in 1812, Babbage transferred to Peterhouse, Cambridge, he was the best mathematician; but he failed to graduate with honours.
+He received an honorary degree later, without even being examinated, in 1814.
+										\n\nIn 1814, Charles Babbage married Georgiana Whitmore at St. Michael\'s Church in Teignmouth, Devon. His father, for some reason, never gave his approvation. They lived in tranquility at 5 Devonshire Street, Portland Place, London.
+Only Three of their 8 children became adult.
+										\n\nTragically, Charles\' father, his wife and one of his sons all died in 1827. </string>
+
+</resources>
