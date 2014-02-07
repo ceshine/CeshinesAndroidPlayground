@@ -12,10 +12,12 @@ import java.util.regex.Pattern;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
-import android.webkit.WebView;
+import android.widget.ImageView;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -24,7 +26,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 public class MainActivity extends Activity {
 	
 	private List<String> PhotoUrlList;
-	WebView myWebView;
+	private ImageView imView;
 	Random rn = new Random();
 	
 	private class DownloadWebPageTask extends AsyncTask<String, Void, String> {
@@ -57,9 +59,34 @@ public class MainActivity extends Activity {
         @Override
         protected void onPostExecute(String result) {
         	PhotoUrlList = parse(result);
-        	displayPhoto();
+        	lucky(null);
         }
     }
+	
+	private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+		@Override
+        protected Bitmap doInBackground(String... urls) {
+            Bitmap bmImg;
+            String url = urls[0];
+            DefaultHttpClient client = new DefaultHttpClient();
+            HttpGet httpGet = new HttpGet(url);
+            try {
+                HttpResponse execute = client.execute(httpGet);
+                InputStream content = execute.getEntity().getContent();
+
+                bmImg = BitmapFactory.decodeStream(content);
+                return bmImg;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+		
+		@Override
+		protected void onPostExecute(Bitmap result){
+			displayPhoto(result);
+		}
+	}
 	
 	private List<String> parse(String xml){
 		String pattern = "<photo id=\"(\\d+)\" owner=\"\\S+\" secret=\"(\\w+)\" server=\"(\\d+)\" farm=\"(\\d+)\"";
@@ -82,28 +109,16 @@ public class MainActivity extends Activity {
 		task.execute(new String[] {url});	
 	}
 	
-	private void displayPhoto(){
-		
-		if(PhotoUrlList == null || PhotoUrlList.size() == 0)
-			return;
-		String url = PhotoUrlList.get(rn.nextInt(PhotoUrlList.size()));
-		
-		//int height= this.getResources().getDisplayMetrics().heightPixels ;
-		int height = (int)(myWebView.getMeasuredHeight() * 0.95);
-		int width = (int)(myWebView.getMeasuredWidth() * 0.95);
-		Log.i("LF", String.format("%d %d", height, PhotoUrlList.size()));		
-		String data="<html><head><title>Example</title><meta name=\"viewport\"\"content=\"width="+width+", initial-scale=1 \" /></head>";
-		data=data+"<body><center><img height=\""+height+"\" src=\""+url+"\" /></center></body></html>";
-		
-		myWebView.loadData(data, "text/html", null);
+	private void displayPhoto(Bitmap photo){
+		Log.i("lucky", "Displaying the photo...");
+		imView.setImageBitmap(photo);
 	}
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		myWebView = (WebView) findViewById(R.id.webView1);
-		myWebView.getSettings().setBuiltInZoomControls(true);
+		imView = (ImageView) findViewById(R.id.imageView1);
 		getPhotoList("beijing");
 	}
 	
@@ -115,6 +130,11 @@ public class MainActivity extends Activity {
 	}
 	
 	public void lucky(View v){
-		displayPhoto();
+		if(PhotoUrlList == null || PhotoUrlList.size() == 0)
+			return;
+		String url = PhotoUrlList.get(rn.nextInt(PhotoUrlList.size()));
+		
+		DownloadImageTask task = new DownloadImageTask();
+		task.execute(new String[] {url});
 	}
 }
