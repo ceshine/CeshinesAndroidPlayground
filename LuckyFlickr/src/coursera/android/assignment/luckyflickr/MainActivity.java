@@ -22,8 +22,12 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -38,6 +42,8 @@ public class MainActivity extends Activity {
 	private int idx;
 	private String keyword;
 	private SharedPreferences pref;
+	private Animation animFadeOut, animFadeIn;
+	private Bitmap photo;
 	
 	private class DownloadWebPageTask extends AsyncTask<String, Void, String> {
         
@@ -94,7 +100,8 @@ public class MainActivity extends Activity {
 		
 		@Override
 		protected void onPostExecute(Bitmap result){
-			displayPhoto(result);
+			photo = result;
+			displayPhoto();
 		}
 	}
 	
@@ -119,10 +126,9 @@ public class MainActivity extends Activity {
 		task.execute(new String[] {url});	
 	}
 	
-	private void displayPhoto(Bitmap photo){
-		Log.i("lucky", "Displaying the photo...");
-		imView.setImageBitmap(photo);
-		getWindow().setTitle(String.format("%s - %s - %s", getResources().getString(R.string.app_name) , keyword,  idx));
+	private void displayPhoto(){
+		Log.i("LF", "Displaying the photo...");
+		imView.startAnimation(animFadeOut);
 	}
 	
 	@Override
@@ -133,7 +139,19 @@ public class MainActivity extends Activity {
 		keyword = pref.getString(KEYWORD_FIELD, "Fun");
 		Log.i("LF", keyword);
 		imView = (ImageView) findViewById(R.id.imageView1);
-		getPhotoList(keyword);
+		animFadeOut = AnimationUtils.loadAnimation(this, R.anim.fadeout);
+		animFadeIn = AnimationUtils.loadAnimation(this, R.anim.fadein);
+		animFadeOut.setAnimationListener(new AnimationListener() {
+            public void onAnimationStart(Animation animation) {}
+            public void onAnimationRepeat(Animation animation) {}
+            public void onAnimationEnd(Animation animation) {
+            	imView.setImageBitmap(photo);
+            	imView.startAnimation(animFadeIn);
+            	getWindow().setTitle(String.format("%s - %s - %s", getResources().getString(R.string.app_name) , keyword,  idx + 1));
+            }
+        });	
+		//Use Flickr api to fetch the list of photos
+		getPhotoList(keyword);		
 	}
 	
 	@Override
@@ -168,6 +186,7 @@ public class MainActivity extends Activity {
 							keyword = userInput.getText().toString();
 							//update preferences
 							pref.edit().putString(KEYWORD_FIELD, keyword).commit();
+							Toast.makeText(getApplicationContext(), "Please wait a sec...", Toast.LENGTH_SHORT).show();
 							getPhotoList(keyword);
 					    }
 					  })
