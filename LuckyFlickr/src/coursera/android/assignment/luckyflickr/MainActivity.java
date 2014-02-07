@@ -12,11 +12,17 @@ import java.util.regex.Pattern;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import org.apache.http.HttpResponse;
@@ -25,9 +31,13 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 public class MainActivity extends Activity {
 	
+	private static final String KEYWORD_FIELD = "keyword";
 	private List<String> PhotoUrlList;
 	private ImageView imView;
-	Random rn = new Random();
+	private Random rn = new Random();
+	private int idx;
+	private String keyword;
+	private SharedPreferences pref;
 	
 	private class DownloadWebPageTask extends AsyncTask<String, Void, String> {
         
@@ -112,14 +122,18 @@ public class MainActivity extends Activity {
 	private void displayPhoto(Bitmap photo){
 		Log.i("lucky", "Displaying the photo...");
 		imView.setImageBitmap(photo);
+		getWindow().setTitle(String.format("%s - %s - %s", getResources().getString(R.string.app_name) , keyword,  idx));
 	}
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		pref = getPreferences(MODE_PRIVATE);
+		keyword = pref.getString(KEYWORD_FIELD, "Fun");
+		Log.i("LF", keyword);
 		imView = (ImageView) findViewById(R.id.imageView1);
-		getPhotoList("beijing");
+		getPhotoList(keyword);
 	}
 	
 	@Override
@@ -129,10 +143,57 @@ public class MainActivity extends Activity {
 		return true;
 	}
 	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    // Handle item selection
+	    switch (item.getItemId()) {
+	        case R.id.action_setKeyword:
+	        	// get keyword_dialog.xml view
+				LayoutInflater li = LayoutInflater.from(this);
+				View promptsView = li.inflate(R.layout.keyword_dialog, null);
+ 
+				AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+ 
+				// set keyword_dialog.xml to alertdialog builder
+				alertDialogBuilder.setView(promptsView);
+ 
+				final EditText userInput = (EditText) promptsView
+						.findViewById(R.id.editTextDialogUserInput);
+ 
+				// set dialog message
+				alertDialogBuilder
+					.setPositiveButton(R.string.ok,
+					  new DialogInterface.OnClickListener() {
+					    public void onClick(DialogInterface dialog,int id) {				 
+							keyword = userInput.getText().toString();
+							//update preferences
+							pref.edit().putString(KEYWORD_FIELD, keyword).commit();
+							getPhotoList(keyword);
+					    }
+					  })
+					.setNegativeButton(R.string.cancel,
+					  new DialogInterface.OnClickListener() {
+					    public void onClick(DialogInterface dialog,int id) {
+					    	dialog.cancel();
+					    }
+					  });
+ 
+				// create alert dialog
+				AlertDialog alertDialog = alertDialogBuilder.create();
+ 
+				// show it
+				alertDialog.show();
+				return super.onOptionsItemSelected(item);
+ 	        default:
+	            return super.onOptionsItemSelected(item);
+	    }
+	}
+	
 	public void lucky(View v){
 		if(PhotoUrlList == null || PhotoUrlList.size() == 0)
 			return;
-		String url = PhotoUrlList.get(rn.nextInt(PhotoUrlList.size()));
+		idx = rn.nextInt(PhotoUrlList.size());
+		String url = PhotoUrlList.get(idx);
 		
 		DownloadImageTask task = new DownloadImageTask();
 		task.execute(new String[] {url});
